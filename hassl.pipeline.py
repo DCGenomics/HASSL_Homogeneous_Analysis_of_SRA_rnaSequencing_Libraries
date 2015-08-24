@@ -51,6 +51,21 @@ rule all:
 rule clean: 
   shell: "rm -fr log qc bams counts project.featureCounts* "
 
+rule qcplots:
+  output: "qc/qc_histogram.jpg"
+  input: "qc/collate.qc.tsv"
+  message: "running R code to generate QC plot"
+  shell: "Rscript {HASSL}/scripts/qc_plots.R {input}"
+
+rule collate:
+  output: "qc/collate.qc.tsv", "counts/collate.counts.tsv"
+  input: expand("qc/{sample}.GRCh38.ens77.hisat.crsm", sample=SAMPLES),
+         expand("counts/{sample}.GRCh38.ens77.featureCounts.counts", sample=SAMPLES)
+  message: "running collate to generate matrix table of CRSM and COUNTS"
+  shell: "{HASSL}/scripts/collate.pl {filename} && \
+          mv -f collate.qc.tsv qc/ && \
+          mv -f collate.counts.tsv counts/"
+
 rule project_counts:
   output: "project.featureCounts"
   input: GTFFILE, expand("bams/{sample}.GRCh38.ens77.hisat.sorted.bam", sample=SAMPLES)

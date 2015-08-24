@@ -2,8 +2,11 @@
 library(ggplot2)
 library(grid)
 
+args = commandArgs(TRUE)
+collate.qc = args[1] # 'qc/collate.qc.tsv'
+
 #Read in data
-Quals <- read.delim("collate.qc.tsv", header=TRUE, stringsAsFactors=TRUE, row.names="Name")
+Quals <- read.delim(collate.qc, header=TRUE, stringsAsFactors=TRUE, row.names="Name")
 
 previous_theme <- theme_set(theme_bw())
 
@@ -19,7 +22,7 @@ a <- a + theme(
   panel.grid.minor = element_blank(),
   panel.background = element_rect(colour = NA),
   panel.border=element_blank())
-a
+#a
 
 
 
@@ -34,7 +37,7 @@ b <- b + theme(
   panel.grid.minor = element_blank(),
   panel.background = element_rect(colour = NA),
   panel.border=element_blank())
-b
+#b
 
 c <- ggplot(data=Quals, aes(x=PCT_INTRONIC_BASES))
 c <- c + geom_histogram() + xlab(expression("Intronic Base %")) +  ylab(NULL)
@@ -47,7 +50,7 @@ c <- c + theme(
   panel.grid.minor = element_blank(),
   panel.background = element_rect(colour = NA),
   panel.border=element_blank())
-c
+#c
 
 
 d <- ggplot(data=Quals, aes(x=MEDIAN_3PRIME_BIAS))
@@ -61,7 +64,7 @@ d <- d + theme(
   panel.grid.minor = element_blank(),
   panel.background = element_rect(colour = NA),
   panel.border=element_blank())
-d
+#d
 
 e <- ggplot(data=Quals, aes(x=MEDIAN_5PRIME_BIAS))
 e <- e + geom_histogram() + xlab(expression("Median 5’UTR Bias")) +  ylab(NULL)
@@ -74,7 +77,7 @@ e <- e + theme(
   panel.grid.minor = element_blank(),
   panel.background = element_rect(colour = NA),
   panel.border=element_blank())
-e
+#e
 
 f <- ggplot(data=Quals, aes(x=PCT_USABLE_BASES))
 f <- f + geom_histogram() + xlab(expression("Usable Base %")) +  ylab(NULL)
@@ -87,10 +90,10 @@ f <- f + theme(
   panel.grid.minor = element_blank(),
   panel.background = element_rect(colour = NA),
   panel.border=element_blank())
-f
+#f
 
 #output graphs
-jpeg("qc_histogram.jpg", quality=100, height= 2.8 , width=8, units= "in", res=300, pointsize=8)
+jpeg("qc/qc_histogram.jpg", quality=100, height= 2.8 , width=8, units= "in", res=300, pointsize=8)
 grid.newpage()
 pushViewport(viewport(layout=grid.layout(1,6)))
 vplayout <- function(x,y)
